@@ -4,7 +4,7 @@ const seedData = async () => {
   try {
     console.log('🌱 Poblando base de datos...')
 
-    // Insertar directores (datos del README)
+    // Insertar directores
     await pool.query(`
       INSERT INTO directores (nombre) VALUES
         ('Christopher Nolan'),
@@ -15,7 +15,7 @@ const seedData = async () => {
       ON CONFLICT DO NOTHING
     `)
 
-    // Insertar géneros (datos del README)
+    // Insertar géneros
     await pool.query(`
       INSERT INTO generos (nombre, slug) VALUES
         ('Ciencia Ficción', 'ciencia-ficcion'),
@@ -26,7 +26,7 @@ const seedData = async () => {
       ON CONFLICT (slug) DO NOTHING
     `)
 
-    // Insertar películas (datos del README)
+    // Insertar películas
     await pool.query(`
       INSERT INTO peliculas (titulo, anio, nota, director_id, genero_id)
       SELECT p.titulo, p.anio, p.nota, d.id, g.id
@@ -49,7 +49,7 @@ const seedData = async () => {
       ON CONFLICT DO NOTHING
     `)
 
-    // Insertar reseñas (datos del README)
+    // Insertar reseñas
     await pool.query(`
       INSERT INTO resenas (pelicula_id, autor, texto, puntuacion)
       SELECT p.id, r.autor, r.texto, r.puntuacion
@@ -68,9 +68,8 @@ const seedData = async () => {
       JOIN peliculas p ON p.titulo = r.titulo
     `)
 
-    // Verificación
     const counts = await pool.query(`
-      SELECT 
+      SELECT
         (SELECT COUNT(*) FROM peliculas) as peliculas,
         (SELECT COUNT(*) FROM resenas) as resenas
     `)

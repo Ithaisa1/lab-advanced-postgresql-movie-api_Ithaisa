@@ -5,9 +5,7 @@ const {
   getPeliculaById,
   createPelicula,
   updatePelicula,
-  deletePelicula,
-  estadisticasDirectores,
-  estadisticasGeneros
+  deletePelicula
 } = require('../controllers/peliculasController')
 
 router.get('/', getAllPeliculas)

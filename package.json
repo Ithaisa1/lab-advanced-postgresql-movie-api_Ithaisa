@@ -1,5 +1,5 @@
 {
-  "name": "lab-advanced-postgresql",
+  "name": "lab-advanced-postgresql-movie-api_ithaisa",
   "version": "1.0.0",
   "description": "Lab PostgreSQL Avanzado",
   "main": "src/app.js",

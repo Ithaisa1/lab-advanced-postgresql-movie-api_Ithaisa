@@ -123,6 +123,28 @@ const estadisticasGeneros = async (req, res, next) => {
   }
 }
 
+// GET /api/estadisticas/evolucion-directores
+const evolucionDirectores = async (req, res, next) => {
+  try {
+    const { rows } = await pool.query(`
+      SELECT
+        d.nombre AS director,
+        p.titulo,
+        p.anio,
+        p.nota,
+        ROW_NUMBER() OVER (PARTITION BY d.nombre ORDER BY p.anio) AS num_pelicula,
+        LAG(p.nota) OVER (PARTITION BY d.nombre ORDER BY p.anio) AS nota_pelicula_anterior,
+        ROUND(p.nota - LAG(p.nota) OVER (PARTITION BY d.nombre ORDER BY p.anio), 2) AS diferencia_con_anterior
+      FROM directores d
+      JOIN peliculas p ON p.director_id = d.id
+      ORDER BY d.nombre, p.anio
+    `)
+    res.json(rows)
+  } catch (err) {
+    next(err)
+  }
+}
+
 module.exports = {
   getAllPeliculas,
   getPeliculaById,
@@ -130,5 +152,6 @@ module.exports = {
   updatePelicula,
   deletePelicula,
   estadisticasDirectores,
-  estadisticasGeneros
+  estadisticasGeneros,
+  evolucionDirectores
 }
